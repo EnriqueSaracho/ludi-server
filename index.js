@@ -1,3 +1,5 @@
+console.log("First log");
+
 // Importing modules to file.
 import express from "express";
 import cors from "cors";
