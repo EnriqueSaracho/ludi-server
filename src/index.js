@@ -26,6 +26,8 @@ const uri = process.env.URI;
 // Establish connection to database.
 mongoose.connect(uri);
 
+console.log("Before 'app.listen'");
+
 // Starting HTTP server
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
