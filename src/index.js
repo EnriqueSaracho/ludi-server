@@ -15,12 +15,7 @@ const app = express();
 
 // Adding middlewares.
 app.use(express.json());
-// app.use(cors());
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-  })
-);
+app.use(cors());
 
 // Mounting routers to respective paths.
 app.use("/games", gamesRouter);
