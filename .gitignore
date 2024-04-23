@@ -1,0 +1,37 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore log files
+*.log
+
+# Ignore generated files
+dist/
+build/
+*.min.js
+*.min.css
+
+# Ignore IDE and editor files
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Ignore OS and editor files
+.DS_Store
+Thumbs.db
+*.swp
+
+
+# Ignore connection string file
+config.env
+
+# Ignore batch file
+GameList.bat
+
+# Ignore shorcut
+Ludi.lnk
+
+# Ignore Dockerfile and .dockerignore
+Dockerfile
+.dockerignore
