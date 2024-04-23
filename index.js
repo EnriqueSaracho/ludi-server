@@ -8,7 +8,7 @@ import { config } from "dotenv";
 config({ path: "./config.env" });
 
 // Importing routers from '/routes'.
-import { gamesRouter } from "./routes/games.js";
+import { gamesRouter } from "./src/routes/games.js";
 
 // Creating express app.
 const app = express();
