@@ -1,5 +1,3 @@
-console.log("First log");
-
 // Importing modules to file.
 import express from "express";
 import cors from "cors";
@@ -27,8 +25,6 @@ const uri = process.env.URI;
 
 // Establish connection to database.
 mongoose.connect(uri);
-
-console.log("Before 'app.listen'");
 
 // Starting HTTP server
 const PORT = process.env.PORT || 3001;
