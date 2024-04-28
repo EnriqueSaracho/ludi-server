@@ -37,7 +37,7 @@ router.post("/login", async (req, res) => {
   // If user doesn't exist
   const user = await UserModel.findOne({ username: username });
   if (!user) {
-    return res.json({ message: "Username or password is incorrect" });
+    return res.json({ message: "Username doesn't exist" });
   }
 
   // If password is incorrect
