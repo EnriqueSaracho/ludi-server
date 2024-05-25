@@ -1,8 +1,19 @@
 // Importing 'express' module.
 import express from "express";
-
+import axios from "axios";
 // Importing models.
 import { GameModel } from "../models/Games.js";
+
+// Importing environmental variables
+import { config } from "dotenv";
+
+
+config({ path: "./config.env" });
+
+const CLIENT_ID = process.env.CLIENT_ID;
+const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
+
+
 
 // Object: router.
 const router = express.Router();
@@ -61,6 +72,26 @@ router.put("/:id", async (req, res) => {
     res.json(response);
   } catch (err) {
     res.json(err);
+  }
+});
+
+// Route handler: fetches all games from IGDB database
+router.post("/igdb/games", async (req, res) => {
+  console.log(req.body.query)
+  try {
+    var options = {
+      method: 'POST',
+      url: 'https://api.igdb.com/v4/games/',
+      headers: {
+        'Client-ID': CLIENT_ID,
+        Authorization: `Bearer ${ACCESS_TOKEN}`
+      },
+      data: req.body.query
+    };
+    const response = await axios.request(options);
+    res.json(response.data);
+  } catch (err) {
+    res.json({ message: err.message });
   }
 });
 
