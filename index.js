@@ -10,6 +10,7 @@ config({ path: "./config.env" });
 // Importing routers from '/routes'.
 import { gamesRouter } from "./src/routes/games.js";
 import { userRouter } from "./src/routes/users.js";
+import { igdbRouter } from "./src/routes/igdb.js";
 
 // Creating express app.
 const app = express();
@@ -21,6 +22,7 @@ app.use(cors());
 // Mounting routers to respective paths.
 app.use("/games", gamesRouter);
 app.use("/auth", userRouter);
+app.use("/igdb", igdbRouter);
 
 // Creating 'uri' variable from 'config.env' key.
 const uri = process.env.URI;
