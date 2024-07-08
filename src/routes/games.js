@@ -1,6 +1,5 @@
 // Importing 'express' module.
 import express from "express";
-
 // Importing models.
 import { GameModel } from "../models/Games.js";
 
