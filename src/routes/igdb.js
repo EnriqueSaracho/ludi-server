@@ -52,12 +52,31 @@ router.post("/covers", async (req, res) => {
 
 // Rounte handler: fetches the cover's url from IGDB database
 router.post("/release_dates", async (req, res) => {
-
   //fields date, date; where id
   try {
     var options = {
       method: "POST",
       url: "https://api.igdb.com/v4/release_dates",
+      headers: {
+        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
+      data: req.body.query,
+    };
+    const response = await axios.request(options);
+    res.json(response.data);
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+});
+
+// Rounte handler: fetches the cover's url from IGDB database
+router.post("/artworks", async (req, res) => {
+  //fields date, date; where id
+  try {
+    var options = {
+      method: "POST",
+      url: "https://api.igdb.com/v4/artworks",
       headers: {
         "Client-ID": CLIENT_ID,
         Authorization: `Bearer ${ACCESS_TOKEN}`,
