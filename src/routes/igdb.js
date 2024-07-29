@@ -36,7 +36,7 @@ router.post("/games", async (req, res) => {
 
 // Route handler: fetches a game initial data from IGDB database
 router.post("/game", async (req, res) => {
-  const query = `fields name, cover, rating, first_release_date, artworks, aggregated_rating, aggregated_rating_count, category; where id = ${req.body.query};`;
+  const query = `fields name, cover, rating, first_release_date, artworks, aggregated_rating, aggregated_rating_count, category, collections; where id = ${req.body.query};`;
   try {
     const options = {
       method: "POST",
@@ -100,7 +100,7 @@ router.post("/cover", async (req, res) => {
   }
 });
 
-// Rounte handler: fetches the game artworks' image_id URL from IGDB database
+// Rounte handler: fetches the game artworks' image_ids URL from IGDB database
 router.post("/artworks", async (req, res) => {
   const query = `fields image_id; limit 500; where id = (${req.body.query
     .map((artwork) => artwork.id)
@@ -110,6 +110,29 @@ router.post("/artworks", async (req, res) => {
     var options = {
       method: "POST",
       url: "https://api.igdb.com/v4/artworks",
+      headers: {
+        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
+      data: query,
+    };
+    const response = await axios.request(options);
+    res.json(response.data);
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+});
+
+// Rounte handler: fetches the game collections' names from IGDB database
+router.post("/collections", async (req, res) => {
+  const query = `fields name; limit 500; where id = (${req.body.query
+    .map((collection) => collection.id)
+    .join(",")});`;
+
+  try {
+    var options = {
+      method: "POST",
+      url: "https://api.igdb.com/v4/collections",
       headers: {
         "Client-ID": CLIENT_ID,
         Authorization: `Bearer ${ACCESS_TOKEN}`,
