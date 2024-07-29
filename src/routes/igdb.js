@@ -11,8 +11,8 @@ const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
 // Object: router.
 const router = express.Router();
 
-// Route handler: fetches a number of games' name and cover id from IGDB database
-router.post("/games", async (req, res) => {
+// Route handler: fetches a number of games' name and cover id according to search input
+router.post("/games_by_search", async (req, res) => {
   // const query = `fields name, cover; limit 500; search "${req.body.query}"; where cover != null & category = 0 & parent_game = null & version_parent = null;`;
   const query = `fields name, cover; limit 500; search "${req.body.query}"; where cover != null;`; // TODO: Use above query for displaying only main titles
 
@@ -34,9 +34,36 @@ router.post("/games", async (req, res) => {
   }
 });
 
+// Route handler: fetches a number of games' name and cover id according to IDs
+router.post("/games_by_id", async (req, res) => {
+  // const query = `fields name, cover; limit 500; search "${req.body.query}"; where cover != null & category = 0 & parent_game = null & version_parent = null;`;
+  // const query = `fields name, cover; limit 500; search "${req.body.query}"; where cover != null;`; // TODO: Use above query for displaying only main titles
+  const dlcs = req.body.query;
+  const query = `fields name, cover; limit 500; where id = (${dlcs
+    .map((dlc) => dlc.id)
+    .join(",")});`;
+
+  try {
+    const options = {
+      method: "POST",
+      url: "https://api.igdb.com/v4/games/",
+      headers: {
+        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
+      data: query,
+    };
+
+    const response = await axios.request(options);
+    res.json(response.data);
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+});
+
 // Route handler: fetches a game initial data from IGDB database
 router.post("/game", async (req, res) => {
-  const query = `fields name, cover, rating, first_release_date, artworks, aggregated_rating, aggregated_rating_count, category, collections; where id = ${req.body.query};`;
+  const query = `fields name, cover, rating, first_release_date, artworks, aggregated_rating, aggregated_rating_count, category, collections, dlcs; where id = ${req.body.query};`;
   try {
     const options = {
       method: "POST",
@@ -57,8 +84,7 @@ router.post("/game", async (req, res) => {
 
 // Rounte handler: fetches a number of cover image_id URLs from IGDB database
 router.post("/covers", async (req, res) => {
-  const gameRecords = req.body.query;
-  const query = `fields image_id; limit 500; where id = (${gameRecords
+  const query = `fields image_id; limit 500; where id = (${req.body.query
     .map((record) => record.cover.id)
     .join(",")});`;
 
