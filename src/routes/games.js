@@ -18,6 +18,7 @@ router.get("/", async (req, res) => {
 
 //Route handler: get a single game.
 router.get("/:id", async (req, res) => {
+  
   try {
     const response = await GameModel.findById(req.params.id);
     res.json(response);

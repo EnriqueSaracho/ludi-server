@@ -8,7 +8,7 @@ import { UserModel } from "../models/Users.js";
 
 // Creating router
 const router = express.Router();
-//Protected Route 
+//Protected Route
 //
 
 // API for registering a user

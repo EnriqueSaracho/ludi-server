@@ -63,7 +63,7 @@ router.post("/games_by_id", async (req, res) => {
 
 // Route handler: fetches a game initial data from IGDB database
 router.post("/game", async (req, res) => {
-  const query = `fields franchises, name, cover, rating, first_release_date, artworks, aggregated_rating, aggregated_rating_count, bundles, category, collections, dlcs, expansions, standalone_expansions, external_games; where id = ${req.body.query};`;
+  const query = `fields game_modes, game_engines, screenshots, franchises, name, cover, rating, first_release_date, artworks, aggregated_rating, aggregated_rating_count, bundles, category, collections, dlcs, expansions, standalone_expansions, external_games; where id = ${req.body.query};`;
   try {
     const options = {
       method: "POST",
@@ -149,6 +149,29 @@ router.post("/artworks", async (req, res) => {
   }
 });
 
+// Rounte handler: fetches the game artworks' image_ids URL from IGDB database
+router.post("/screenshots", async (req, res) => {
+  const query = `fields image_id; limit 500; where id = (${req.body.query
+    .map((artwork) => artwork.id)
+    .join(",")});`;
+
+  try {
+    var options = {
+      method: "POST",
+      url: "https://api.igdb.com/v4/screenshots",
+      headers: {
+        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
+      data: query,
+    };
+    const response = await axios.request(options);
+    res.json(response.data);
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+});
+
 // Rounte handler: fetches the game collections' names from IGDB database
 router.post("/collections", async (req, res) => {
   const query = `fields name; limit 500; where id = (${req.body.query
@@ -172,6 +195,29 @@ router.post("/collections", async (req, res) => {
   }
 });
 
+// Rounte handler: fetches the game collections' names from IGDB database
+router.post("/game_modes", async (req, res) => {
+  const query = `fields name; limit 500; where id = (${req.body.query
+    .map((mode) => mode.id)
+    .join(",")});`;
+
+  try {
+    var options = {
+      method: "POST",
+      url: "https://api.igdb.com/v4/game_modes",
+      headers: {
+        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
+      data: query,
+    };
+    const response = await axios.request(options);
+    res.json(response.data);
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+});
+
 // Rounte handler: fetches the game franchises' names from IGDB database
 router.post("/franchises", async (req, res) => {
   const query = `fields name; limit 500; where id = (${req.body.query
@@ -182,6 +228,52 @@ router.post("/franchises", async (req, res) => {
     var options = {
       method: "POST",
       url: "https://api.igdb.com/v4/franchises",
+      headers: {
+        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
+      data: query,
+    };
+    const response = await axios.request(options);
+    res.json(response.data);
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+});
+
+// Rounte handler: fetches the game's info on other services (external_games)
+router.post("/external_games", async (req, res) => {
+  const query = `fields category, url; limit 500; where id = (${req.body.query
+    .map((service) => service.id)
+    .join(",")});`;
+
+  try {
+    var options = {
+      method: "POST",
+      url: "https://api.igdb.com/v4/external_games",
+      headers: {
+        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
+      data: query,
+    };
+    const response = await axios.request(options);
+    res.json(response.data);
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+});
+
+// Rounte handler: fetches the game's engines
+router.post("/game_engines", async (req, res) => {
+  const query = `fields name; limit 500; where id = (${req.body.query
+    .map((engine) => engine.id)
+    .join(",")});`;
+
+  try {
+    var options = {
+      method: "POST",
+      url: "https://api.igdb.com/v4/game_engines",
       headers: {
         "Client-ID": CLIENT_ID,
         Authorization: `Bearer ${ACCESS_TOKEN}`,
