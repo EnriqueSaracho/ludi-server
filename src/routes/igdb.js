@@ -63,7 +63,7 @@ router.post("/games_by_id", async (req, res) => {
 
 // Route handler: fetches a game initial data from IGDB database
 router.post("/game", async (req, res) => {
-  const query = `fields game_modes, game_engines, screenshots, franchises, name, cover, rating, first_release_date, artworks, aggregated_rating, aggregated_rating_count, bundles, category, collections, dlcs, expansions, standalone_expansions, external_games; where id = ${req.body.query};`;
+  const query = `fields involved_companies, genres, game_modes, game_engines, screenshots, franchises, name, cover, rating, first_release_date, artworks, aggregated_rating, aggregated_rating_count, bundles, category, collections, dlcs, expansions, standalone_expansions, external_games; where id = ${req.body.query};`;
   try {
     const options = {
       method: "POST",
@@ -195,7 +195,30 @@ router.post("/collections", async (req, res) => {
   }
 });
 
-// Rounte handler: fetches the game collections' names from IGDB database
+// Rounte handler: fetches the game genres' names from IGDB database
+router.post("/genres", async (req, res) => {
+  const query = `fields name; limit 500; where id = (${req.body.query
+    .map((genre) => genre.id)
+    .join(",")});`;
+
+  try {
+    var options = {
+      method: "POST",
+      url: "https://api.igdb.com/v4/genres",
+      headers: {
+        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
+      data: query,
+    };
+    const response = await axios.request(options);
+    res.json(response.data);
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+});
+
+// Rounte handler: fetches the game game_modes' names from IGDB database
 router.post("/game_modes", async (req, res) => {
   const query = `fields name; limit 500; where id = (${req.body.query
     .map((mode) => mode.id)
