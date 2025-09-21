@@ -14,10 +14,8 @@ const router = express.Router();
 // Fetches 'name', 'cover', and 'first_release_date' for searched games
 router.post("/games_by_search", async (req, res) => {
   // const query = `fields name, cover; limit 500; search "${req.body.query}"; where cover != null & category = 0 & parent_game = null & version_parent = null;`; // Fetches only main games
-  const query = `fields name, cover; limit 500; search "${req.body.query}"; where (category = 0 | category = 4) & version_parent = null;`; // Fetches only main and standalone games
-  // const query = `fields name, cover, first_release_date; limit 500; search "${req.body.query}"; where cover != null;`; // Fetches games of all categgories
-
-  console.log(query);
+  // const query = `fields name, cover; limit 500; search "${req.body.query}"; where (category = 0 | category = 4) & version_parent = null;`; // Fetches only main and standalone games
+  const query = `fields name, cover, first_release_date; limit 500; search "${req.body.query}"; where cover != null;`; // Fetches games of all categgories
 
   try {
     const options = {
@@ -32,6 +30,7 @@ router.post("/games_by_search", async (req, res) => {
     };
 
     const response = await axios.request(options);
+    console.log(response.data);
     res.json(response.data);
   } catch (err) {
     res.json({ message: err.message });

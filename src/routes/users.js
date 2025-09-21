@@ -53,5 +53,10 @@ router.post("/login", async (req, res) => {
   res.json({ token, userID: user._id });
 });
 
+// Adding a game to the to-play queue
+// router.post("/queue", async (req, res) => {
+  
+// })
+
 // Exporting router
 export { router as userRouter };
